@@ -1,9 +1,10 @@
+require('dotenv').load()
 const Tessel = require("tessel-io");
 const five = require("johnny-five");
 const mqtt = require('mqtt');
 
 // TODO(SW): Move the URL into a .env file
-const client = mqtt.connect('mqtt://ec2-35-160-160-48.us-west-2.compute.amazonaws.com');
+const client = mqtt.connect(process.env.MQTT_BROKER_URL);
 
 const board = new five.Board({
   io: new Tessel(),
@@ -28,6 +29,7 @@ board.on('ready', () => {
     monitor.on('change', function() {
       let now = Date.now();
 
+      // If we are more than 5 seconds from the last update, publish new sensor data
       if (now - lastUpdated >= 5000) {
         lastUpdated = now;
 

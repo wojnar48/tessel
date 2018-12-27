@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "barcli": "0.0.25",
+    "dotenv": "^6.2.0",
     "johnny-five": "^1.0.0",
     "mqtt": "^2.18.8",
     "t2-cli": "^0.1.22",
