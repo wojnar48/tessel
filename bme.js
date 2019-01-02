@@ -28,20 +28,12 @@ board.on('ready', () => {
   client.on('connect', () => {
     client.publish('bme:connected', 'true');
 
-    let lastUpdated = Date.now() - 5000;
-
-    monitor.on('change', function() {
-      let now = Date.now();
-
-      // If we are more than 5 seconds from the last update, publish new sensor data
-      if (now - lastUpdated >= 5000) {
-        lastUpdated = now;
-
-        client.publish('bme:thermometer', `${monitor.thermometer.fahrenheit}`);
-        client.publish('bme:barometer', `${monitor.barometer.pressure}`);
-        client.publish('bme:hygrometer', `${monitor.hygrometer.relativeHumidity}`);
-      }
-    });
-
+    // Publish sensor data every 2 seconds
+    // TODO(SW): Publish bme reading as part of one message instead of 3 separate ones
+    setInterval(() => {
+      client.publish('bme:thermometer', `${monitor.thermometer.fahrenheit}`);
+      client.publish('bme:barometer', `${monitor.barometer.pressure}`);
+      client.publish('bme:hygrometer', `${monitor.hygrometer.relativeHumidity}`);
+    }, 2000);
   });
 });
