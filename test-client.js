@@ -1,8 +1,11 @@
-require('dotenv').load()
-const mqtt = require('mqtt')
+const fs = require('fs');
+const mqtt = require('mqtt');
 
-// const client = mqtt.connect('mqtt://ec2-35-160-160-48.us-west-2.compute.amazonaws.com')
-const client = mqtt.connect(process.env.MQTT_BROKER_URL)
+// Create a config json object
+const content = fs.readFileSync('.env.json', 'utf8');
+const config = JSON.parse(content);
+
+const client = mqtt.connect(config.MQTT_BROKER_URL)
 
 client.on('connect', () => {
   client.subscribe('bme:connected');
