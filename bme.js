@@ -13,7 +13,7 @@ const client = mqtt.connect(config.MQTT_BROKER_URL);
 const board = new five.Board({
   io: new Tessel(),
   repl: false,
-  debug: false,
+  // debug: false,
 });
 
 // When the board is done initializing and ready to read sensor data
@@ -29,11 +29,14 @@ board.on('ready', () => {
     client.publish('bme:connected', 'true');
 
     // Publish sensor data every 2 seconds
-    // TODO(SW): Publish bme reading as part of one message instead of 3 separate ones
     setInterval(() => {
-      client.publish('bme:thermometer', `${monitor.thermometer.fahrenheit}`);
-      client.publish('bme:barometer', `${monitor.barometer.pressure}`);
-      client.publish('bme:hygrometer', `${monitor.hygrometer.relativeHumidity}`);
+      const data = {
+        temperature: monitor.thermometer.fahrenheit,
+        pressure: monitor.barometer.pressure,
+        humidity: monitor.hygrometer.relativeHumidity,
+      };
+
+      client.publish('bme:gauge', `${JSON.stringify(data)}`);
     }, 2000);
   });
 });
