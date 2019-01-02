@@ -1,10 +1,11 @@
+const path = require('path');
 const Tessel = require("tessel-io");
 const five = require("johnny-five");
 const mqtt = require('mqtt');
 const fs = require('fs');
 
 // Create a config json object
-const content = fs.readFileSync('.env.json', 'utf8');
+const content = fs.readFileSync(path.join(__dirname, '.env.json'));
 const config = JSON.parse(content);
 
 const client = mqtt.connect(config.MQTT_BROKER_URL);
